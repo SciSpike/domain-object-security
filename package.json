@@ -4,7 +4,8 @@
   "description": "Application-level security for domain entities",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive test",
+    "lint": "standard --verbose"
   },
   "author": "",
   "license": "ISC",
