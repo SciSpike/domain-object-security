@@ -18,6 +18,7 @@
   "dependencies": {
     "enumify": "1.0.4",
     "mutrait": "1.0.0-pre.6",
+    "uuid": "3.3.2",
     "verror": "1.10.0"
   }
 }
