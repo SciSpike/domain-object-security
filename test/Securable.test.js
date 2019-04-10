@@ -32,18 +32,18 @@ class SomePrincipal extends traits(Identifiable) {}
 
 describe('Securable', () => {
   describe('static security', () => {
-    it('should permit when permitted', () => {
+    it('should grant when permitted', () => {
       const p1 = new SomePrincipal()
       const p2 = new SomePrincipal()
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      s.permit(p1, a)
-      expect(s.permits(p1, [a])).to.be.true()
+      s.grant(p1, a)
+      expect(s.grants(p1, [a])).to.be.true()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
     })
 
@@ -52,19 +52,19 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
       s.deny(p1, a)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
     })
 
-    it('should not permit by default', () => {
+    it('should not grant by default', () => {
       const p1 = new SomePrincipal()
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
     })
 
@@ -73,60 +73,60 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      s.permit(p1, a)
+      s.grant(p1, a)
       s.deny(p1, a)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
     })
 
-    it('should permit all principals an action', () => {
+    it('should grant all principals an action', () => {
       const p1 = new SomePrincipal()
       const p2 = new SomePrincipal()
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
-      s.permit(CommonPrincipal.ALL, a)
-      expect(s.permits(p1, [a])).to.be.true()
+      s.grant(CommonPrincipal.ALL, a)
+      expect(s.grants(p1, [a])).to.be.true()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.true()
+      expect(s.grants(p2, [a])).to.be.true()
       expect(s.denies(p2, [a])).to.be.false()
     })
 
-    it('should permit a principal all actions', () => {
+    it('should grant a principal all actions', () => {
       const p1 = new SomePrincipal()
       const p2 = new SomePrincipal()
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      s.permit(p1, SimpleAction.ALL)
-      expect(s.permits(p1, [a])).to.be.true()
+      s.grant(p1, SimpleAction.ALL)
+      expect(s.grants(p1, [a])).to.be.true()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
     })
 
-    it('should permit all principal all actions', () => {
+    it('should grant all principal all actions', () => {
       const p1 = new SomePrincipal()
       const p2 = new SomePrincipal()
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
-      s.permit(CommonPrincipal.ALL, SimpleAction.ALL)
-      expect(s.permits(p1, [a])).to.be.true()
+      s.grant(CommonPrincipal.ALL, SimpleAction.ALL)
+      expect(s.grants(p1, [a])).to.be.true()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.true()
+      expect(s.grants(p2, [a])).to.be.true()
       expect(s.denies(p2, [a])).to.be.false()
     })
 
@@ -136,14 +136,14 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
       s.deny(CommonPrincipal.ALL, a)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.true()
     })
 
@@ -153,12 +153,12 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
       s.deny(p1, SimpleAction.ALL)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
     })
 
@@ -168,14 +168,14 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
       s.deny(CommonPrincipal.ALL, SimpleAction.ALL)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.true()
     })
 
@@ -185,13 +185,13 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      s.permit(p1, a)
+      s.grant(p1, a)
       s.deny(p1, SimpleAction.ALL)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
     })
 
@@ -201,15 +201,15 @@ describe('Securable', () => {
       const s = new SomeSecurable()
       const a = SimpleAction.SECURE
 
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.false()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.false()
-      s.permit(CommonPrincipal.ALL, a)
+      s.grant(CommonPrincipal.ALL, a)
       s.deny(CommonPrincipal.ALL, SimpleAction.ALL)
-      expect(s.permits(p1, [a])).to.be.false()
+      expect(s.grants(p1, [a])).to.be.false()
       expect(s.denies(p1, [a])).to.be.true()
-      expect(s.permits(p2, [a])).to.be.false()
+      expect(s.grants(p2, [a])).to.be.false()
       expect(s.denies(p2, [a])).to.be.true()
     })
   })
@@ -231,7 +231,7 @@ describe('Securable', () => {
         this._deniedActions = [SimpleAction.UPDATE, SimpleAction.DELETE, SimpleAction.SECURE]
       }
 
-      permits (principal) {
+      grants (principal) {
         if (principal instanceof Manager) return true
         if (principal instanceof Teller) return true
         return false
@@ -258,14 +258,14 @@ describe('Securable', () => {
       lo.secureWith(strategy)
       hi.secureWith(strategy)
 
-      expect(lo.permits(teller, SimpleAction.instanceActions())).to.be.true()
+      expect(lo.grants(teller, SimpleAction.instanceActions())).to.be.true()
       expect(lo.denies(teller, SimpleAction.instanceActions())).to.be.false()
-      expect(hi.permits(teller, SimpleAction.instanceActions())).to.be.false()
+      expect(hi.grants(teller, SimpleAction.instanceActions())).to.be.false()
       expect(hi.denies(teller, SimpleAction.instanceActions())).to.be.true()
 
-      expect(lo.permits(manager, SimpleAction.instanceActions())).to.be.true()
+      expect(lo.grants(manager, SimpleAction.instanceActions())).to.be.true()
       expect(lo.denies(manager, SimpleAction.instanceActions())).to.be.false()
-      expect(hi.permits(manager, SimpleAction.instanceActions())).to.be.true()
+      expect(hi.grants(manager, SimpleAction.instanceActions())).to.be.true()
       expect(hi.denies(manager, SimpleAction.instanceActions())).to.be.false()
     })
   })
