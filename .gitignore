@@ -1,8 +1,8 @@
 
 # Created by https://www.gitignore.io/api/macos,linux,windows,jetbrains+all,eclipse,node
+# Edit at https://www.gitignore.io/?templates=macos,linux,windows,jetbrains+all,eclipse,node
 
 ### Eclipse ###
-
 .metadata
 bin/
 tmp/
@@ -136,6 +136,12 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+# Android studio 3.1+ serialized cache file
+.idea/caches/build_file_checksums.ser
+
+# JetBrains templates
+**___jb_tmp___
+
 ### JetBrains+all Patch ###
 # Ignores the whole .idea folder and all .iml files
 # See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
@@ -148,6 +154,9 @@ fabric.properties
 modules.xml
 .idea/misc.xml
 *.ipr
+
+# Sonarlint plugin
+.idea/sonarlint
 
 ### Linux ###
 *~
@@ -199,6 +208,10 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Runtime data
 pids
@@ -215,7 +228,7 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
 # Bower dependency directory (https://bower.io/)
@@ -251,6 +264,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -265,7 +279,13 @@ typings/
 .vuepress/dist
 
 # Serverless directories
-.serverless
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -292,5 +312,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
 # End of https://www.gitignore.io/api/macos,linux,windows,jetbrains+all,eclipse,node
+lib/

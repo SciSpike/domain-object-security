@@ -8,8 +8,8 @@ const expect = chai.expect
 const uuid = require('uuid/v4')
 const { Trait, traits } = require('mutrait')
 
-const Securable = require('../lib/Securable')
-const SimpleAction = require('../lib/PrimitiveAction')
+const Securable = require('../../main/Securable')
+const SimpleAction = require('../../main/PrimitiveAction')
 const CommonPrincipal = require('../lib/CommonPrincipal')
 
 const Identifiable = Trait(s => class extends s {

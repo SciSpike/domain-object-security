@@ -7,7 +7,7 @@ const expect = chai.expect
 
 const uuid = require('uuid/v4')
 
-const testSameness = require('../lib/SamenessTester')
+const testSameness = require('../../main/SamenessTester')
 
 class Thing {}
 

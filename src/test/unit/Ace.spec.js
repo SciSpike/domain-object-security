@@ -8,7 +8,7 @@ const expect = chai.expect
 const uuid = require('uuid/v4')
 const { Trait, traits } = require('mutrait')
 
-const Ace = require('../lib/Ace')
+const Ace = require('../../main/Ace')
 
 const Identifiable = Trait(s => class extends s {
   constructor () {
