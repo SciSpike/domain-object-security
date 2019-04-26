@@ -9,7 +9,7 @@ const uuid = require('uuid/v4')
 const { Trait, traits } = require('mutrait')
 
 const Securable = require('../lib/Securable')
-const SimpleAction = require('../lib/SimpleAction')
+const SimpleAction = require('../lib/PrimitiveAction')
 const CommonPrincipal = require('../lib/CommonPrincipal')
 
 const Identifiable = Trait(s => class extends s {
