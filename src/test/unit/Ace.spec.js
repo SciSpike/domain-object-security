@@ -9,6 +9,9 @@ const uuid = require('uuid/v4')
 const { Trait, traits } = require('mutrait')
 
 const Ace = require('../../main/Ace')
+const StaticAccessControlStrategy = require('../../main/StaticAccessControlStrategy')
+const GRANT = StaticAccessControlStrategy.GRANT
+const DENY = StaticAccessControlStrategy.DENY
 
 const Identifiable = Trait(s => class extends s {
   constructor () {
@@ -45,6 +48,10 @@ describe('Ace', () => {
     expect(ace.grants({ principal, action: uuid() })).to.equal(false)
     expect(ace.denies({ principal, action })).to.equal(false)
     expect(ace.denies({ principal, action: uuid() })).to.equal(false)
+    expect(ace.appliesToPrincipal(principal)).to.equal(true)
+    expect(ace.appliesToAction(action)).to.equal(true)
+    expect(ace.appliesToSecurable()).to.equal(true)
+    expect(ace.appliesToStrategy(GRANT)).to.equal(true)
   })
 
   it('should work with deny', function () {
@@ -55,6 +62,10 @@ describe('Ace', () => {
     expect(ace.denies({ principal, action: uuid() })).to.equal(false)
     expect(ace.grants({ principal, action })).to.equal(false)
     expect(ace.grants({ principal, action: uuid() })).to.equal(false)
+    expect(ace.appliesToPrincipal(principal)).to.equal(true)
+    expect(ace.appliesToAction(action)).to.equal(true)
+    expect(ace.appliesToSecurable()).to.equal(true)
+    expect(ace.appliesToStrategy(DENY)).to.equal(true)
   })
 
   it('should work with a custom strategy', function () {
@@ -62,6 +73,7 @@ describe('Ace', () => {
     const john = 'john'
     const felix = 'felix'
     const jan = 'jan'
+
     const close = 'close'
 
     const strategy = {
@@ -91,46 +103,56 @@ describe('Ace', () => {
     const data = { hiThreshold, loThreshold }
 
     const hiAccount = { balance: hiThreshold + 1 }
-    const medAccount = { balance: hiThreshold - 1 }
+    const mdAccount = { balance: hiThreshold - 1 }
     const loAccount = { balance: loThreshold - 1 }
 
     const hi = Ace.of({ securable: hiAccount, strategy })
-    const med = Ace.of({ securable: medAccount, strategy })
+    const md = Ace.of({ securable: mdAccount, strategy })
     const lo = Ace.of({ securable: loAccount, strategy })
+
+    for (const ace of [hi, md, lo]) {
+      expect(ace.appliesToPrincipal()).to.equal(true)
+      expect(ace.appliesToPrincipal(sally)).to.equal(true)
+      expect(ace.appliesToPrincipal(john)).to.equal(true)
+      expect(ace.appliesToPrincipal(felix)).to.equal(true)
+      expect(ace.appliesToPrincipal(jan)).to.equal(true)
+
+      expect(ace.appliesToAction()).to.equal(true)
+      expect(ace.appliesToAction(close)).to.equal(true)
+
+      expect(ace.appliesToStrategy()).to.equal(false)
+      expect(ace.appliesToStrategy(strategy)).to.equal(true)
+    }
+
+    expect(hi.appliesToSecurable(hiAccount)).to.equal(true)
+    expect(md.appliesToSecurable(mdAccount)).to.equal(true)
+    expect(lo.appliesToSecurable(loAccount)).to.equal(true)
 
     expect(hi.grants({ principal: sally, action: close, securable: hiAccount, data })).to.equal(true)
     expect(hi.denies({ principal: sally, action: close, securable: hiAccount, data })).to.equal(false)
-
-    expect(med.grants({ principal: sally, action: close, securable: medAccount, data })).to.equal(true)
-    expect(med.denies({ principal: sally, action: close, securable: medAccount, data })).to.equal(false)
-
+    expect(md.grants({ principal: sally, action: close, securable: mdAccount, data })).to.equal(true)
+    expect(md.denies({ principal: sally, action: close, securable: mdAccount, data })).to.equal(false)
     expect(lo.grants({ principal: sally, action: close, securable: loAccount, data })).to.equal(true)
     expect(lo.denies({ principal: sally, action: close, securable: loAccount, data })).to.equal(false)
 
     expect(hi.grants({ principal: john, action: close, securable: hiAccount, data })).to.equal(false)
     expect(hi.denies({ principal: john, action: close, securable: hiAccount, data })).to.equal(false)
-
-    expect(med.grants({ principal: john, action: close, securable: medAccount, data })).to.equal(true)
-    expect(med.denies({ principal: john, action: close, securable: medAccount, data })).to.equal(false)
-
+    expect(md.grants({ principal: john, action: close, securable: mdAccount, data })).to.equal(true)
+    expect(md.denies({ principal: john, action: close, securable: mdAccount, data })).to.equal(false)
     expect(lo.grants({ principal: john, action: close, securable: loAccount, data })).to.equal(true)
     expect(lo.denies({ principal: john, action: close, securable: loAccount, data })).to.equal(false)
 
     expect(hi.grants({ principal: felix, action: close, securable: hiAccount, data })).to.equal(false)
     expect(hi.denies({ principal: felix, action: close, securable: hiAccount, data })).to.equal(true)
-
-    expect(med.grants({ principal: felix, action: close, securable: medAccount, data })).to.equal(false)
-    expect(med.denies({ principal: felix, action: close, securable: medAccount, data })).to.equal(true)
-
+    expect(md.grants({ principal: felix, action: close, securable: mdAccount, data })).to.equal(false)
+    expect(md.denies({ principal: felix, action: close, securable: mdAccount, data })).to.equal(true)
     expect(lo.grants({ principal: felix, action: close, securable: loAccount, data })).to.equal(false)
     expect(lo.denies({ principal: felix, action: close, securable: loAccount, data })).to.equal(true)
 
     expect(hi.grants({ principal: jan, action: close, securable: hiAccount, data })).to.equal(false)
     expect(hi.denies({ principal: jan, action: close, securable: hiAccount, data })).to.equal(false)
-
-    expect(med.grants({ principal: jan, action: close, securable: medAccount, data })).to.equal(false)
-    expect(med.denies({ principal: jan, action: close, securable: medAccount, data })).to.equal(false)
-
+    expect(md.grants({ principal: jan, action: close, securable: mdAccount, data })).to.equal(false)
+    expect(md.denies({ principal: jan, action: close, securable: mdAccount, data })).to.equal(false)
     expect(lo.grants({ principal: jan, action: close, securable: loAccount, data })).to.equal(true)
     expect(lo.denies({ principal: jan, action: close, securable: loAccount, data })).to.equal(false)
   })

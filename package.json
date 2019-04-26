@@ -10,14 +10,14 @@
     "transpile": "run-s transpile-main transpile-test",
     "transpile-main": "babel --delete-dir-on-start --verbose --out-dir lib/main --copy-files src/main",
     "transpile-test": "babel --delete-dir-on-start --verbose --out-dir lib/test --copy-files src/test",
-    "unit-integration": "nyc --check-coverage --statements 81 --branches 65 --functions 72 --lines 83 -x 'lib/test' --exclude-after-remap false mocha --opts mocha.opts 'lib/test/unit/**/*.spec.js' 'lib/test/integration/**/*.spec.js'",
+    "unit-integration": "nyc --check-coverage --statements 81 --branches 65 --functions 72 --lines 83 -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js' 'lib/test/integration/**/*.spec.js'",
     "postunit-integration": "run-s report",
-    "integration": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha --opts mocha.opts 'lib/test/integration/**/*.spec.js'",
+    "integration": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha 'lib/test/integration/**/*.spec.js'",
     "postintegration": "run-s report",
-    "i": "mocha --opts mocha.opts 'src/test/integration/**/*.spec.js' | npx bunyan",
-    "unit": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha --opts mocha.opts 'lib/test/unit/**/*.spec.js'",
+    "i": "mocha 'src/test/integration/**/*.spec.js' | npx bunyan",
+    "unit": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js'",
     "postunit": "run-s report",
-    "u": "mocha --opts mocha.opts 'src/test/unit/**/*.spec.js' | npx bunyan",
+    "u": "mocha 'src/test/unit/**/*.spec.js' | npx bunyan",
     "test": "run-s transpile unit-integration lint",
     "report": "nyc report --reporter=html",
     "cov": "open coverage/index.html",
@@ -94,5 +94,9 @@
   },
   "standard": {
     "parser": "babel-eslint"
+  },
+  "mocha": {
+    "colors": true,
+    "require": "@babel/register"
   }
 }

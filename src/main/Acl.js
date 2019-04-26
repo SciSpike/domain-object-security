@@ -118,10 +118,10 @@ const Acl = Trait(s => class extends s {
 
   _secure ({ strategy, principal, securable, action, add = true }) {
     const index = this._aces.findIndex(ace =>
-      ace.hasPrincipal(principal) &&
-      ace.hasAction(action) &&
-      ace.hasStrategy(strategy) &&
-      (securable ? ace.hasSecurable(securable) : true)
+      ace.appliesToPrincipal(principal) &&
+      ace.appliesToAction(action) &&
+      ace.appliesToStrategy(strategy) &&
+      (securable ? ace.appliesToSecurable(securable) : true)
     )
 
     if (add && index === -1) { // not found, so add

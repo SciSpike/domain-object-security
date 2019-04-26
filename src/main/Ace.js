@@ -21,36 +21,26 @@ class Ace {
     return new Ace({ strategy, principal, securable, action, samenessTesterFn })
   }
 
-  constructor ({ strategy, principal, securable, action, samenessTesterFn = DEFAULT_SAMENESS_TESTER }) {
-    this._principal = this._testSetPrincipal(principal)
-    this._action = this._testSetAction(action)
+  constructor ({ strategy, principal, securable, action, samenessTesterFn = Ace.DEFAULT_SAMENESS_TESTER }) {
+    this._principal = principal
+    this._action = action
+    this._securable = securable
     this._strategy = this._testSetStrategy(strategy)
-    this._securable = this._testSetSecurable(securable)
     this._testSameness = samenessTesterFn
+
+    Object.freeze(this)
   }
 
   get principal () {
     return this._principal
   }
 
-  _testSetPrincipal (principal) {
-    return principal
-  }
-
   get action () {
     return this._action
   }
 
-  _testSetAction (action) {
-    return action
-  }
-
   get securable () {
     return this._securable
-  }
-
-  _testSetSecurable (securable) {
-    return securable
   }
 
   get strategy () {
@@ -58,7 +48,7 @@ class Ace {
   }
 
   _testSetStrategy (strategy) {
-    if (!strategy) throw new Error('no strategy given')
+    if (typeof strategy?.grants !== 'function' || typeof strategy?.denies !== 'function') throw new Error('invalid strategy given')
     return strategy
   }
 
@@ -68,8 +58,8 @@ class Ace {
    */
   _applies ({ principal, securable, action }) {
     return (
-      this.hasSecurable(securable) &&
-      this.hasAction(action) &&
+      this.appliesToSecurable(securable) &&
+      this.appliesToAction(action) &&
       (!this._principal || this._testSameness(this._principal, principal))
     )
   }
@@ -89,21 +79,23 @@ class Ace {
     )
   }
 
-  hasPrincipal (principal) {
+  appliesToPrincipal (principal) {
     return !this._principal || this._testSameness(principal, this._principal)
   }
 
-  hasAction (action) {
+  appliesToAction (action) {
     return !this._action || this._testSameness(action, this._action)
   }
 
-  hasSecurable (securable) {
+  appliesToSecurable (securable) {
     return !this._securable || this._testSameness(securable, this._securable)
   }
 
-  hasStrategy (strategy) {
+  appliesToStrategy (strategy) {
     return this._testSameness(strategy, this._strategy)
   }
 }
+
+Ace.DEFAULT_SAMENESS_TESTER = DEFAULT_SAMENESS_TESTER
 
 module.exports = Ace
