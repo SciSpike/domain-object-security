@@ -1,16 +1,13 @@
 'use strict'
 
-const { Trait, traits } = require('mutrait')
 const { GRANT, DENY } = require('./StaticAccessControlStrategy')
-const Ace = require('./Ace').Class
+const Ace = require('./Ace')
 
 /**
- * Access control list trait.
- * @type {(function(Function): Function)|TraitFunction|*}
+ * Access control list
  */
-const Acl = Trait(s => class extends s {
+class Acl {
   constructor () {
-    super(...arguments)
     this._aces = []
   }
 
@@ -29,15 +26,15 @@ const Acl = Trait(s => class extends s {
     const aces = this._findApplicableAces({ principals, actions, securable })
     if (this._denies({ principals, actions, securable, aces })) return false
 
-    const grantsByAction = actions.reduce((action, accum) => {
-      accum[action] = false
-      return accum
+    const grantsByAction = actions.reduce((grants, action) => {
+      grants[action] = false
+      return grants
     }, {})
 
     for (const ace of aces) {
       for (const principal of principals) {
         for (const action of actions) {
-          if (!grantsByAction[action] && ace.grants(principal, action, securable, data)) {
+          if (!grantsByAction[action] && ace.grants({ principal, action, securable, data })) {
             grantsByAction[action] = true
           }
         }
@@ -58,6 +55,9 @@ const Acl = Trait(s => class extends s {
    * @return {boolean}
    */
   denies ({ principals, actions, securable, data }) {
+    principals = this._ensureArray(principals)
+    actions = this._ensureArray(actions)
+
     return this._denies({
       principals,
       actions,
@@ -74,7 +74,7 @@ const Acl = Trait(s => class extends s {
     for (const ace of aces) {
       for (const principal of principals) {
         for (const action of actions) {
-          if (ace.denies(principal, action, securable, data)) return true
+          if (ace.denies({ principal, action, securable, data })) return true
         }
       }
     }
@@ -82,10 +82,27 @@ const Acl = Trait(s => class extends s {
   }
 
   _findApplicableAces ({ principals, actions, securable }) {
-    return this._aces.filter(it =>
-      principals.includes(it.principal) &&
-      actions.includes(it.action) &&
-      it._argsAreSame(it.securable, securable))
+    return this._aces.filter(ace => {
+      let applies = false
+      for (const p of principals) {
+        if (ace.appliesToPrincipal(p)) {
+          applies = true
+          break
+        }
+      }
+      if (!applies) return false
+
+      applies = false
+      for (const a of actions) {
+        if (ace.appliesToAction(a)) {
+          applies = true
+          break
+        }
+      }
+      if (!applies) return false
+
+      return ace.appliesToSecurable(securable)
+    })
   }
 
   _ensureArray (it) {
@@ -125,19 +142,13 @@ const Acl = Trait(s => class extends s {
     )
 
     if (add && index === -1) { // not found, so add
-      this._aces.push(Ace.Class.of({ strategy, principal, securable, action }))
+      this._aces.push(Ace.of({ strategy, principal, securable, action }))
     } else if (!add && index !== -1) { // found, so remove
       this._aces.splice(index, 1)
     }
 
     return this
   }
-})
-
-/**
- * A default access control list class.
- * @type {Acl.Class}
- */
-Acl.Class = class extends traits(Acl) {}
+}
 
 module.exports = Acl

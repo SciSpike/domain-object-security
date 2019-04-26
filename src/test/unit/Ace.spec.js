@@ -4,7 +4,6 @@
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
-
 const uuid = require('uuid/v4')
 const { Trait, traits } = require('mutrait')
 
