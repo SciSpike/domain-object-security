@@ -2,9 +2,23 @@
   "name": "@scispike/domain-object-security",
   "version": "0.1.0-pre.10",
   "description": "Application-level domain object security",
+  "homepage": "https://github.com/SciSpike/domain-object-security#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SciSpike/domain-object-security.git"
+  },
+  "keywords": [
+    "security",
+    "access control",
+    "authorization",
+    "rbac",
+    "instance-level security",
+    "application-level security"
+  ],
   "engines": {
     "node": ">=10.12.0"
   },
+  "license": "MIT",
   "scripts": {
     "build": "run-s test",
     "transpile": "run-s transpile-main transpile-test",
@@ -28,6 +42,9 @@
     "prelink": "run-s make-distribution",
     "link": "cd lib/main && npm link; cd ../..",
     "unlink": "cd lib/main && npm unlink; cd ../.."
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
