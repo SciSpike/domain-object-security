@@ -2,7 +2,7 @@
 
 const { Trait } = require('mutrait')
 
-const Acl = require('./Acl').Class
+const Acl = require('./Acl')
 const AuthorizationError = require('./AuthorizationError')
 const StaticAccessControlStrategy = require('./StaticAccessControlStrategy')
 const GRANT = StaticAccessControlStrategy.GRANT
@@ -21,80 +21,82 @@ const Securable = Trait(s => class extends s {
   /**
    * Determines whether the given principal can take all of the given actions against this securable.
    */
-  grants ({ principal, actions, data }) {
-    return !this.secured || this._acl.grants({ principal, actions, data })
+  grants ({ principals, actions, data }) {
+    return !this.secured || this._acl.grants({ principals, actions, securable: this, data })
   }
 
   /**
    * Determines whether the given principal is explicitly denied the ability to take any of the given actions against this securable.
    */
-  denies ({ principal, actions, data }) {
-    return this.secured && this._acl.denies({ principal, actions, data })
+  denies ({ principals, actions, data }) {
+    return this.secured && this._acl.denies({ principals, actions, securable: this, data })
   }
 
   /**
    * Cause this securable to grant to the given principal the given action.
    *
-   * Note: The principal must already be granted the right to secure this securable.
+   * Note: The principal must already be granted the right to secure this securable, unless this securable is not yet secured.
    */
-  grant ({ principal, action }) {
-    return this.secure({ principal, action, strategy: GRANT })
+  grant ({ principal, action, securor }) {
+    return this.secure({ principal, action, strategy: GRANT, securor })
   }
 
   /**
    * Cause this securable to no longer grant to the given principal the given action.
    *
-   * Note: The principal must already be granted the right to secure this securable.
+   * Note: The securor must already be granted the right to secure this securable, unless this securable is not yet secured.
    */
-  ungrant ({ principal, action }) {
-    return this.unsecure({ principal, action, strategy: GRANT })
+  ungrant ({ principal, action, securor }) {
+    return this.unsecure({ principal, action, strategy: GRANT, securor })
   }
 
   /**
    * Cause this securable to explicitly deny from the given principal the ability to take given action.
    *
-   * Note: The principal must already be granted the right to secure this securable.
+   * Note: The securor must already be granted the right to secure this securable, unless this securable is not yet secured.
    */
-  deny ({ principal, action }) {
-    return this.secure({ principal, action, strategy: DENY })
+  deny ({ principal, action, securor }) {
+    return this.secure({ principal, action, strategy: DENY, securor })
   }
 
   /**
    * Cause this securable to no longer explicitly deny from the given principal the ability to take given action.
    *
-   * Note: The principal must already be granted the right to secure this securable.
+   * Note: The securor must already be granted the right to secure this securable, unless this securable is not yet secured.
    */
-  undeny ({ principal, action }) {
-    return this.unsecure({ principal, action, strategy: DENY })
+  undeny ({ principal, action, securor }) {
+    if (!this.secured) return this
+
+    return this.unsecure({ principal, action, strategy: DENY, securor })
   }
 
   /**
    * Cause this securable to secure itself with the given security strategy to be used with the given principal for the given action.
    *
-   * Note: The principal must already be granted the right to secure this securable.
+   * Note: The securor must already be granted the right to secure this securable, unless this securable is not yet secured.
    */
-  secure ({ strategy, principal, action }) {
-    return this._secure({ strategy, principal, action, add: true })
+  secure ({ strategy, principal, action, securor }) {
+    return this._secure({ strategy, principal, action, securor, add: true })
   }
 
   /**
    * Cause this securable to no longer secure itself with the given security strategy with the given principal for the given action.
    *
-   * Note: The principal must already be granted the right to secure this securable.
+   * Note: The securor must already be granted the right to secure this securable, unless this securable is not yet secured.
    */
-  unsecure ({ strategy, principal, actions }) {
+  unsecure ({ strategy, principal, action, securor }) {
     if (!this.secured) return this
 
-    return this._secure({ strategy, principal, actions, add: false })
+    return this._secure({ strategy, principal, action, securor, add: false })
   }
 
-  _secure ({ strategy, principal, actions, add = true }) {
+  _secure ({ strategy, principal, action, securor = null, add = true }) {
     if (!this.secured) {
-      this._ensureAcl()._secure({ strategy: GRANT, principal, action: SECURE, add: true })
+      this._ensureAcl()._secure({ strategy: GRANT, principal: securor || principal, action: SECURE, add: true })
     } else {
       this._authorizeSecurabilityBy(principal)
     }
-    this._acl._secure({ strategy, principal, actions, add })
+    this._acl._secure({ strategy, principal, action, add })
 
     return this
   }
@@ -104,7 +106,7 @@ const Securable = Trait(s => class extends s {
   }
 
   _authorizeSecurabilityBy (principal) {
-    if (this.secured && !this.grants(principal, SECURE)) {
+    if (this.secured && !this.grants({ principals: principal, actions: SECURE })) {
       throw new AuthorizationError({ principal, action: SECURE })
     }
   }

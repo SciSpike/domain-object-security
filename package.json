@@ -34,7 +34,8 @@
     "@babel/polyfill": "7.4.3",
     "@scispike/nodejs-support": "1.2.0-pre.2",
     "enumify": "1.0.4",
-    "mutrait": "1.0.0"
+    "mutrait": "1.0.0",
+    "verror": "1.10.0"
   },
   "devDependencies": {
     "@babel/cli": "7.4.3",

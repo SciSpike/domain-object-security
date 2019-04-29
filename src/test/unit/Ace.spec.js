@@ -5,36 +5,19 @@ const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
 const uuid = require('uuid/v4')
-const { Trait, traits } = require('mutrait')
+const { traits } = require('mutrait')
 
 const Ace = require('../../main/Ace')
 const StaticAccessControlStrategy = require('../../main/StaticAccessControlStrategy')
 const GRANT = StaticAccessControlStrategy.GRANT
 const DENY = StaticAccessControlStrategy.DENY
 
-const Identifiable = Trait(s => class extends s {
-  constructor () {
-    super(...arguments)
-    this._id = uuid()
-  }
-
-  get id () {
-    return this._id
-  }
-
-  set id (id) {
-    this._id = id
-  }
-
-  identifies (that) {
-    return this === that || (that && this.id === that.id)
-  }
-})
+const Identifiable = require('./Identifiable')
 
 class Principal extends traits(Identifiable) {
   constructor (id) {
     super(...arguments)
-    this.id = id
+    this._id = id
   }
 }
 
@@ -42,7 +25,9 @@ describe('Ace', () => {
   it('should work with grant', function () {
     const principal = new Principal()
     const action = uuid()
+
     const ace = Ace.granting({ principal, action })
+
     expect(ace.grants({ principal, action })).to.equal(true)
     expect(ace.grants({ principal, action: uuid() })).to.equal(false)
     expect(ace.denies({ principal, action })).to.equal(false)
@@ -56,7 +41,9 @@ describe('Ace', () => {
   it('should work with deny', function () {
     const principal = new Principal()
     const action = uuid()
+
     const ace = Ace.denying({ principal, action })
+
     expect(ace.denies({ principal, action })).to.equal(true)
     expect(ace.denies({ principal, action: uuid() })).to.equal(false)
     expect(ace.grants({ principal, action })).to.equal(false)
