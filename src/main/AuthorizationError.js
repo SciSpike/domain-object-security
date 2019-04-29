@@ -1,18 +1,5 @@
 'use strict'
 
-const VError = require('verror')
+const CodedError = require('@scispike/nodejs-support/errors/CodedError')
 
-class AuthorizationError extends VError {
-  constructor ({ principal, actions, data } = {}) {
-    super({
-      name: 'E_UNAUTHORIZED',
-      info: {
-        principal,
-        actions,
-        data
-      }
-    })
-  }
-}
-
-module.exports = AuthorizationError
+module.exports = module.exports = CodedError({ code: 'E_UNAUTHORIZED' })

@@ -23,7 +23,6 @@
     "cov": "open coverage/index.html",
     "lint": "standard --verbose 'src/**/*.js'",
     "format": "standard --fix 'src/**/*.js'",
-    "delete-all-collections": "firebase --project $GCP_PROJECT firestore:delete --all-collections",
     "make-distribution": "run-s transpile finalize-distribution",
     "finalize-distribution": "copyfiles --verbose package.json package-lock.json README.md lib/main",
     "prelink": "run-s make-distribution",
@@ -32,7 +31,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
-    "@scispike/nodejs-support": "1.2.0-pre.2",
+    "@scispike/nodejs-support": "1.2.0-rc.0",
+    "cls-hooked": "4.2.2",
     "enumify": "1.0.4",
     "mutrait": "1.0.0",
     "verror": "1.10.0"
