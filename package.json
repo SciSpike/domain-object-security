@@ -1,7 +1,7 @@
 {
   "name": "@scispike/domain-object-security",
   "version": "0.1.0-pre.10",
-  "description": "Application-level domain object security",
+  "description": "Domain object security",
   "homepage": "https://github.com/SciSpike/domain-object-security#readme",
   "repository": {
     "type": "git",
