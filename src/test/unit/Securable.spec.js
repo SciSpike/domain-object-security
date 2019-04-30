@@ -7,7 +7,7 @@ const expect = chai.expect
 const { traits } = require('mutrait')
 
 const Securable = require('../../main/Securable')
-const PrimitiveAction = require('../../main/PrimitiveAction')
+const { PrimitiveAction } = require('@scispike/acl')
 
 const Identifiable = require('./Identifiable')
 class SomeSecurable extends traits(Identifiable, Securable) {}

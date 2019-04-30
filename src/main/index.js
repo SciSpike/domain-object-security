@@ -1,11 +1,13 @@
 'use strict'
 
+const { Ace, Acl, PrimitiveAction, SamenessTester, StaticAccessControlStrategy } = require('@scispike/acl')
+
 module.exports = {
-  Ace: require('./Ace'),
-  Acl: require('./Acl'),
   AuthorizationError: require('./AuthorizationError'),
-  PrimitiveAction: require('./PrimitiveAction'),
-  SamenessTester: require('./SamenessTester'),
   Securable: require('./Securable'),
-  StaticAccessControlStrategy: require('./StaticAccessControlStrategy')
+  Ace,
+  Acl,
+  PrimitiveAction,
+  SamenessTester,
+  StaticAccessControlStrategy
 }

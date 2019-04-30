@@ -2,13 +2,12 @@
 
 const { Trait } = require('mutrait')
 
-const Acl = require('./Acl')
-const AuthorizationError = require('./AuthorizationError')
-const StaticAccessControlStrategy = require('./StaticAccessControlStrategy')
+const { Acl, StaticAccessControlStrategy, PrimitiveAction } = require('@scispike/acl')
 const GRANT = StaticAccessControlStrategy.GRANT
 const DENY = StaticAccessControlStrategy.DENY
-const PrimitiveAction = require('./PrimitiveAction')
 const SECURE = PrimitiveAction.SECURE
+
+const AuthorizationError = require('./AuthorizationError')
 
 const Securable = Trait(s => class extends s {
   /**

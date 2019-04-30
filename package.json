@@ -1,6 +1,6 @@
 {
   "name": "@scispike/domain-object-security",
-  "version": "0.1.0-pre.10",
+  "version": "1.0.0-pre.0",
   "description": "Domain object security",
   "homepage": "https://github.com/SciSpike/domain-object-security#readme",
   "repository": {
@@ -24,7 +24,7 @@
     "transpile": "run-s transpile-main transpile-test",
     "transpile-main": "babel --delete-dir-on-start --verbose --out-dir lib/main --copy-files src/main",
     "transpile-test": "babel --delete-dir-on-start --verbose --out-dir lib/test --copy-files src/test",
-    "unit-integration": "nyc --check-coverage --statements 81 --branches 65 --functions 72 --lines 83 -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js' 'lib/test/integration/**/*.spec.js'",
+    "unit-integration": "nyc --check-coverage --statements 75 --branches 70 --functions 76 --lines 79 -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js' 'lib/test/integration/**/*.spec.js'",
     "postunit-integration": "run-s report",
     "integration": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha 'lib/test/integration/**/*.spec.js'",
     "postintegration": "run-s report",
@@ -48,11 +48,11 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
+    "@scispike/acl": "1.0.0-rc.0",
     "@scispike/nodejs-support": "1.2.0-rc.0",
     "cls-hooked": "4.2.2",
     "enumify": "1.0.4",
-    "mutrait": "1.0.0",
-    "verror": "1.10.0"
+    "mutrait": "1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.4.3",
