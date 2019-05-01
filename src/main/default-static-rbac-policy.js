@@ -8,7 +8,7 @@
 //   if strategy === true, GRANT
 //   else if strategy === false, DENY
 //   else if typeof strategy === 'function', return strategy(clazz, role, action, data): true|false
-//   else typeof strategy === 'string', return require(strategy)(clazz, role, action, data)): true|false
+//   else typeof strategy === 'string', return require(strategy)(clazz, role, action, data): true|false
 
 const policy = [
   {
