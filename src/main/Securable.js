@@ -93,7 +93,7 @@ const Securable = Trait(s => class extends s {
     if (!this.secured) {
       this._ensureAcl()._secure({ strategy: GRANT, principal: securor || principal, action: SECURE, add: true })
     } else {
-      this._authorizeSecurabilityBy(principal)
+      this._authorizeSecurabilityBy(securor || principal)
     }
     this._acl._secure({ strategy, principal, action, add })
 
