@@ -127,3 +127,4 @@ module.exports = Account
 
 ## TODO
 There's more to write here, but for now, see the tests in `src/test/unit/Securable.spec.js` for usage.
+
