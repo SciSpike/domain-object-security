@@ -37,12 +37,12 @@ describe('unit tests of StaticRbacRepository', () => {
     const clazz = 'Foo'
     const method = 'bar'
     const role = 'Cowboy'
-    const repo = new RoleTypeBasedObjectAccessControlRepository([ {
+    const repo = new RoleTypeBasedObjectAccessControlRepository([{
       classes: new RegExp(`^${clazz}$`),
       methods: new RegExp(`^${method}$`),
       roles: new RegExp(`^${role}$`),
       strategy: false
-    } ])
+    }])
 
     const rcm = { role: [role], clazz, method }
 
@@ -54,7 +54,7 @@ describe('unit tests of StaticRbacRepository', () => {
     const clazz = 'Foo'
     const method = 'bar'
     const role = 'Cowboy'
-    const repo = new RoleTypeBasedObjectAccessControlRepository([ {
+    const repo = new RoleTypeBasedObjectAccessControlRepository([{
       classes: new RegExp(`^${clazz}$`),
       methods: new RegExp(`^${method}$`),
       roles: new RegExp(`^${role}$`),
@@ -69,7 +69,7 @@ describe('unit tests of StaticRbacRepository', () => {
       methods: new RegExp(`^${method}$`),
       roles: new RegExp(`^${role}$`),
       strategy: false
-    } ])
+    }])
 
     const rcm = { role: [role], clazz, method }
 
@@ -84,12 +84,12 @@ describe('unit tests of StaticRbacRepository', () => {
     const owner = 'Owner'
     const strategy = it => it?.role === manager || it?.role === owner
 
-    const repo = new RoleTypeBasedObjectAccessControlRepository([ {
+    const repo = new RoleTypeBasedObjectAccessControlRepository([{
       classes: new RegExp(`^${clazz}$`),
       methods: new RegExp(`^${method}$`),
-      roles: new RegExp(`^.*$`),
+      roles: new RegExp('^.*$'),
       strategy
-    } ])
+    }])
 
     const rcm = { role: [manager, owner], clazz, method }
 
@@ -107,12 +107,12 @@ describe('unit tests of StaticRbacRepository', () => {
     // Managers can only close accounts on even calendar days
     const strategy = it => it?.role === manager && it?.data?.dayOfMonth % 2 === 0
 
-    const repo = new RoleTypeBasedObjectAccessControlRepository([ {
+    const repo = new RoleTypeBasedObjectAccessControlRepository([{
       classes: new RegExp(`^${clazz}$`),
       methods: new RegExp(`^${method}$`),
-      roles: new RegExp(`^.*$`),
+      roles: new RegExp('^.*$'),
       strategy
-    } ])
+    }])
 
     let dayOfMonth = 1
     expect(repo.denies({ role: manager, clazz, method, data: { dayOfMonth } })).to.be.false()
