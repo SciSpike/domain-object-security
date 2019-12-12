@@ -2,6 +2,12 @@
 
 This library allows you to secure your domain objects, so that you can ask questions like "Can Sally read Bob's account balance?" or "Can bank teller Jan close account #123?"
 
+> DEPRECATION NOTE:
+> Since the time this package was created, SciSpike has been acquired by [Northscaler](https://www.northscaler.com).
+> There will be no further development on this module.
+> Instead, development will continue at either [@northscaler/method-access-controller](https://www.npmjs.com/package/@northscaler/method-access-controller) for functionality related to `RoleTypeBasedObjectAccessControlRepository`, which has been rename there to `MethodAccessController`, or [@northscaler-public/securable-trait](https://www.npmjs.com/package/@northscaler/securable-trait) for `Securable`.
+> You can see all of Northscaler's public Node.js modules at https://www.npmjs.com/search?q=%40northscaler.
+
 The primary export of this module is a trait called `Securable`, which you can cause your class(es) to express; see our [`mutrait`](https://npmjs.com/package/mutrait) package for full trait support in JavaScript.
 
 ## TL;DR
