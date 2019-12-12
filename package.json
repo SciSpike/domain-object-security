@@ -49,14 +49,14 @@
   "dependencies": {
     "@babel/polyfill": "7.7.0",
     "@scispike/acl": "1.0.0-rc.1",
-    "@scispike/nodejs-support": "2.0.1",
+    "@scispike/nodejs-support": "2.0.2",
     "cls-hooked": "4.2.2",
     "enumify": "1.0.4",
     "mutrait": "1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.7.0",
-    "@babel/core": "7.7.0",
+    "@babel/core": "7.7.2",
     "@babel/plugin-proposal-class-properties": "7.7.0",
     "@babel/plugin-proposal-decorators": "7.7.0",
     "@babel/plugin-proposal-optional-chaining": "7.6.0",
